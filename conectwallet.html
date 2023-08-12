@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGM site</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #1c1c1c;
+        font-family: Arial, sans-serif;
+        color: #e5e5e5;
+    }
+
+    .div1 {    
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+   
+    button {
+        width: 220px;
+        height: 40px;
+        background-color: #303030;
+        border: 1px solid #707070;
+        cursor: pointer;
+        color: #e5e5e5;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    span {
+        font-weight: bold;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    #logoImage {
+        display: block;
+        margin: 0 auto 20px;
+        max-width: 150px;
+    }
+
+</style>
+</head>
+<body>
+    <div class="div1">
+        <img id="logoImage" src="src/pngwing.com.png" alt="Logo World of Warcraft">
+        <button id="connectButton">Connect the Ether Wallet</button>
+        <h3>Ethereum Account Balance: <span id="accountBalance">-</span> ETH</h3>
+        <p>Wallet Hash: <span id="walletHash">-</span></p>
+    </div>
+    
+<script>
+    document.querySelector('#connectButton').addEventListener('click', async () => {
+        try {
+            if (window.ethereum) {
+                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                const account = accounts[0];
+                
+                const balance = await ethereum.request({
+                    method: 'eth_getBalance',
+                    params: [account, 'latest'],
+                });
+
+                const formattedBalance = (parseInt(balance) / 1e18).toFixed(4);
+                document.querySelector('#accountBalance').textContent = formattedBalance;
+
+                document.querySelector('#walletHash').textContent = account;
+            } else {
+                alert("Connect your Wallet!");
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Install Metamask wallet in your browser");
+        }
+    });
+</script>
+</body>
+</html>
